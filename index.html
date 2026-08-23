@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Utah Bucket List</title>
+<meta name="description" content="A field guide to everything left to do in Utah, Sept 2026 through June 2027 — organized by season, tracked on your device." />
+<meta name="theme-color" content="#ffffff" />
+
+<meta property="og:title" content="Utah Bucket List" />
+<meta property="og:description" content="Everything left to do in Utah before June 2027, sorted by season." />
+<meta property="og:type" content="website" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231f1f1f'/%3E%3Crect x='16' y='16' width='30' height='30' fill='%23FB4A00'/%3E%3Crect x='54' y='16' width='30' height='30' fill='%2315B757'/%3E%3Crect x='16' y='54' width='30' height='30' fill='%233A668F'/%3E%3Crect x='54' y='54' width='30' height='30' fill='%23F2F3F4'/%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero__top">
+    <span class="hero__mark" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </span>
+    <span class="hero__wordmark">Utah Bucket List</span>
+    <span class="hero__tag" id="trip-range">Sept 2026 → Jun 2027</span>
+  </div>
+
+  <h1 class="hero__title">
+    <span class="hero__title-a hero__reveal" style="animation-delay:0ms">A Utah bucket list,</span>
+    <span class="hero__title-b hero__reveal" style="animation-delay:70ms">mapped season by season.</span>
+  </h1>
+
+  <p class="hero__sub hero__reveal" style="animation-delay:140ms">
+    A field guide organized by when to do it — checked off right here on your phone. Nothing leaves this device.
+  </p>
+
+  <div class="hero__stats hero__reveal" style="animation-delay:210ms" role="group" aria-label="Progress overview">
+    <div class="hero__stat">
+      <span class="hero__stat-num" id="stat-pct">0%</span>
+      <span class="hero__stat-label">visited</span>
+    </div>
+    <div class="hero__bar-wrap">
+      <div class="hero__bar-track">
+        <div class="hero__bar-fill" id="bar-fill"></div>
+      </div>
+      <p class="hero__bar-caption" id="stat-count">0 of 0 places checked off</p>
+      <p class="hero__bar-caption hero__bar-caption--muted" id="stat-time">—</p>
+    </div>
+  </div>
+
+  <div class="hero-photo" aria-hidden="true"></div>
+</header>
+
+<nav class="filterbar" id="filterbar" aria-label="Filter list">
+  <div class="filterbar__inner">
+    <button class="chip is-active" data-filter="all">All</button>
+    <button class="chip" data-filter="todo">To Do</button>
+    <button class="chip" data-filter="done">Done</button>
+    <button class="chip chip--icon" id="jump-now" title="Jump to time-sensitive items" aria-label="Jump to time-sensitive items">
+      Act now
+      <svg class="chip__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6"/></svg>
+    </button>
+  </div>
+</nav>
+
+<main id="sections"></main>
+
+<footer class="notes">
+  <h2 class="notes__title">A Few Notes</h2>
+  <ul class="notes__list">
+    <li>Great Salt Lake levels remain historically low — Antelope Island's main boat ramp is closed and the Spiral Jetty shoreline has shifted with it. Worth checking current conditions if you go back.</li>
+    <li>Elevation-dependent spots (Cedar Breaks, Mirror Lake Highway) stay snowed in through spring — the timeline above assumes a normal snowpack, so check road status for early-season trips.</li>
+    <li>Snowfall varies a lot year to year (Alta swung from a record 903&Prime; season in 2022–23 to its least-snowy season on record in 2025–26) — check current conditions rather than planning strictly off averages.</li>
+  </ul>
+  <p class="notes__meta">
+    Tracked entirely on this device — nothing is uploaded anywhere. Clear your browser data and the checklist resets.
+    <button class="notes__reset" id="reset-btn">Reset all progress</button>
+  </p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
