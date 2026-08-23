@@ -10,14 +10,6 @@ const TRIP_END = "2027-06-30";
 
 const SECTIONS = [
   {
-    key: "done",
-    label: "Already Checked Off",
-    dates: "The first stretch",
-    icon: "stamp",
-    theme: "ink",
-    intro: "You're off to a strong start — here's what's already in the book.",
-  },
-  {
     key: "now",
     label: "Do This Now",
     dates: "Time-sensitive · Sept 2026",
@@ -64,6 +56,14 @@ const SECTIONS = [
     icon: "compass",
     theme: "dusk",
     intro: "SLC culture, food, and far-flung corners of the state — fit these in wherever.",
+  },
+  {
+    key: "done",
+    label: "Already Checked Off",
+    dates: "Already in the book",
+    icon: "stamp",
+    theme: "ink",
+    intro: "Everything already crossed off, kept here for the record.",
   },
 ];
 

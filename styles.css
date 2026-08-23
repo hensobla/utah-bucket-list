@@ -48,7 +48,41 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
-  color-scheme: light;
+  /* Tells the browser this page supports both schemes, so native chrome
+     (scrollbars, form controls) follows the OS preference automatically —
+     no toggle, no JS. The actual token swap below does the same. */
+  color-scheme: light dark;
+}
+
+/* Dark palette — mirrors every light-mode role 1:1. The accent "-deep"
+   text variants flip from darkened (for contrast on white) to lightened
+   (for contrast on the dark paper below); every ratio here was checked
+   against --paper the same way the light-mode audit was, not eyeballed. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #17191d;
+    --paper-2: #1e2126;
+    --paper-3: #272b31;
+    --ink: #f0f1f3;
+    --muted: #9ba3b0;
+    --line: #3a414b;
+    --line-strong: #525c6b;
+
+    --rust: #fb4a00;
+    --rust-deep: #ff8f5c;
+    --amber: #c8712c;
+    --amber-deep: #e3a565;
+    --teal: #5a8ab5;
+    --teal-deep: #8dbce0;
+    --sage: #22c766;
+    --sage-deep: #6fe0a0;
+    --gold: #d9a53a;
+    --gold-deep: #f0c869;
+    --dusk: #7c8798;
+    --dusk-deep: #b6c0cf;
+
+    --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
 }
 
 * {
@@ -260,7 +294,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
 }
@@ -364,7 +398,16 @@ main {
    transform equivalent for "reveal to auto height". */
 
 .section__head {
-  width: 100%;
+  /* Explicit width, not "width: 100%" and not auto. <button> is a form
+     control, so even at display:flex it sizes to its content
+     (shrink-to-fit) instead of filling the container the way a normal
+     block box would — "width: 100%" pins the border-box to the
+     container's content width and the negative margins below then just
+     shift it left without widening it, and plain "auto" doesn't fill
+     available space either for the same shrink-to-fit reason. Adding
+     the bled-out margin back into an explicit calc() is what actually
+     spans it edge to edge inside the section's border. */
+  width: calc(100% + 2.2rem);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -609,12 +652,12 @@ main {
 }
 
 .tag--time-sensitive {
-  background: color-mix(in srgb, var(--rust) 14%, white);
+  background: color-mix(in srgb, var(--rust) 14%, var(--paper));
   border-color: var(--rust);
   color: var(--rust-deep);
 }
 .tag--stretch {
-  background: color-mix(in srgb, var(--gold) 16%, white);
+  background: color-mix(in srgb, var(--gold) 16%, var(--paper));
   border-color: var(--gold);
   color: var(--gold-deep);
 }
