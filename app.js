@@ -20,6 +20,7 @@
     sun: '<circle cx="12" cy="12" r="4.5" /><path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />',
     compass:
       '<circle cx="12" cy="12" r="9.5" /><path d="M15.5 8.5 13 13l-4.5 2.5L11 11l4.5-2.5z" />',
+    search: '<circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3" />',
   };
 
   const state = loadState();
@@ -127,8 +128,8 @@
 
   // ---------- rendering ----------
 
-  function iconMarkup(key) {
-    return `<svg class="section__icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[key] || ICONS.compass}</svg>`;
+  function iconMarkup(key, svgClass) {
+    return `<svg class="${svgClass || "section__icon-svg"}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[key] || ICONS.compass}</svg>`;
   }
 
   function itemMatchesFilter(item) {
@@ -149,6 +150,10 @@
     return labels[tag] || tag;
   }
 
+  function googleSearchUrl(item) {
+    return `https://www.google.com/search?q=${encodeURIComponent(`${item.title} Utah`)}`;
+  }
+
   function renderItem(item) {
     const done = isDone(item.id);
     const tags = (item.tags || [])
@@ -157,19 +162,24 @@
 
     return `
       <li>
-        <button class="card ${done ? "is-done" : ""}" data-id="${item.id}" aria-pressed="${done}">
-          <span class="card__stamp" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 12.5l5 5L20 6" />
-            </svg>
-          </span>
-          <span class="card__body">
-            <span class="card__title">${item.title}</span>
-            ${item.meta ? `<span class="card__meta">${item.meta}</span>` : ""}
-            <span class="card__blurb">${item.blurb}</span>
-            ${tags ? `<span class="card__tags">${tags}</span>` : ""}
-          </span>
-        </button>
+        <div class="card ${done ? "is-done" : ""}">
+          <button class="card__toggle" data-id="${item.id}" aria-pressed="${done}">
+            <span class="card__stamp" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 12.5l5 5L20 6" />
+              </svg>
+            </span>
+            <span class="card__body">
+              <span class="card__title">${item.title}</span>
+              ${item.meta ? `<span class="card__meta">${item.meta}</span>` : ""}
+              <span class="card__blurb">${item.blurb}</span>
+              ${tags ? `<span class="card__tags">${tags}</span>` : ""}
+            </span>
+          </button>
+          <a class="card__search" href="${googleSearchUrl(item)}" target="_blank" rel="noopener noreferrer" aria-label="Search Google for ${item.title}" title="Search Google for ${item.title}">
+            ${iconMarkup("search", "card__search-icon")}
+          </a>
+        </div>
       </li>`;
   }
 
@@ -219,10 +229,10 @@
   // Patch a single card in place (no full rebuild) so the checkmark and
   // card tint can transition smoothly instead of popping via innerHTML reset.
   function updateItemUI(id) {
-    const btn = document.querySelector(`.card[data-id="${id}"]`);
+    const btn = document.querySelector(`.card__toggle[data-id="${id}"]`);
     if (!btn) return;
     const done = isDone(id);
-    btn.classList.toggle("is-done", done);
+    btn.closest(".card").classList.toggle("is-done", done);
     btn.setAttribute("aria-pressed", String(done));
     // Feedback lives entirely in the checkbox's own transition (fill +
     // check draw) — no extra card-level animation. Checking things off is a
@@ -245,7 +255,7 @@
     container.innerHTML = html || `<p class="empty-state">Nothing matches this filter yet.</p>`;
 
     // wire up card toggles
-    container.querySelectorAll(".card").forEach((btn) => {
+    container.querySelectorAll(".card__toggle").forEach((btn) => {
       btn.addEventListener("click", () => toggle(btn.dataset.id));
     });
 
