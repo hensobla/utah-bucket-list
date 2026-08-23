@@ -19,11 +19,11 @@
   --paper-3: #eef0f2;
   --ink: #1f1f1f;
   --muted: #6b7280;
-  --muted-2: #9aa1ab;
   --line: #bfd1e1;
   --line-strong: #90a9c2;
 
-  /* accent system — sparing on purpose. One color per season. */
+  /* accent system — sparing on purpose. One color per season. All
+     "-deep" shades are tuned to clear 4.5:1 against --paper for text use. */
   --rust: #fb4a00; /* time-sensitive / "now" */
   --rust-deep: #c93e00;
   --amber: #b15a1f; /* fall */
@@ -31,9 +31,9 @@
   --teal: #3a668f; /* winter */
   --teal-deep: #2a4d69;
   --sage: #15b757; /* spring */
-  --sage-deep: #0e8a3f;
+  --sage-deep: #0d7f3a;
   --gold: #c99427; /* early summer */
-  --gold-deep: #96721d;
+  --gold-deep: #8a691b;
   --dusk: #5b6472; /* anytime */
   --dusk-deep: #454c57;
 
@@ -72,6 +72,16 @@ body {
 
 a {
   color: inherit;
+}
+
+/* A consistent, on-brand keyboard focus ring instead of leaving it to
+   whatever the browser/OS default happens to render. */
+.chip:focus-visible,
+.card:focus-visible,
+.section__head:focus-visible,
+.notes__reset:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
 }
 
 /* ---------------- hero ---------------- */
@@ -124,6 +134,7 @@ a {
 .hero__title-a,
 .hero__title-b {
   display: block;
+  text-wrap: balance;
 }
 
 .hero__title-a {
@@ -142,6 +153,7 @@ a {
   font-size: 0.98rem;
   color: var(--muted);
   line-height: 1.6;
+  text-wrap: pretty;
 }
 
 .hero__stats {
@@ -171,7 +183,7 @@ a {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--muted-2);
+  color: var(--muted);
 }
 
 .hero__bar-wrap {
@@ -435,6 +447,7 @@ main {
   font-size: 1.05rem;
   line-height: 1.2;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .section__dates {
@@ -460,8 +473,7 @@ main {
   margin: 0.65rem 0 0;
   font-size: 0.88rem;
   color: var(--muted);
-  border-left: 2px solid var(--line);
-  padding-left: 0.6rem;
+  text-wrap: pretty;
 }
 
 /* ---------------- cards ---------------- */
@@ -575,6 +587,7 @@ main {
   color: var(--muted);
   line-height: 1.5;
   margin-top: 0.15rem;
+  text-wrap: pretty;
 }
 
 .card__tags {
@@ -596,14 +609,14 @@ main {
 }
 
 .tag--time-sensitive {
-  background: var(--rust);
+  background: color-mix(in srgb, var(--rust) 14%, white);
   border-color: var(--rust);
-  color: var(--paper);
+  color: var(--rust-deep);
 }
 .tag--stretch {
-  background: var(--gold);
+  background: color-mix(in srgb, var(--gold) 16%, white);
   border-color: var(--gold);
-  color: var(--paper);
+  color: var(--gold-deep);
 }
 
 .empty-state {
@@ -642,7 +655,7 @@ main {
 
 .notes__meta {
   font-size: 0.78rem;
-  color: var(--muted-2);
+  color: var(--muted);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -737,6 +750,11 @@ main {
   }
   .card {
     height: 100%;
+  }
+  /* An odd item count otherwise strands the last card alone in the
+     left column with a dead gap beside it — let it span both. */
+  .card-list li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }
 
