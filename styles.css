@@ -92,17 +92,9 @@ a {
 
 .hero__mark {
   flex: none;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 2px;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 18px;
 }
-.hero__mark span:nth-child(1) { background: var(--rust); }
-.hero__mark span:nth-child(2) { background: var(--sage); }
-.hero__mark span:nth-child(3) { background: var(--teal); }
-.hero__mark span:nth-child(4) { background: var(--ink); }
 
 .hero__wordmark {
   font-weight: 700;
@@ -688,7 +680,9 @@ main {
   position: fixed;
   left: 50%;
   bottom: 1.25rem;
-  transform: translate(-50%, 130%);
+  transform: translate(-50%, 12px);
+  opacity: 0;
+  pointer-events: none;
   background: var(--ink);
   color: var(--paper);
   font-size: 0.85rem;
@@ -696,12 +690,14 @@ main {
   padding: 0.65rem 1.1rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow-float);
-  transition: transform 280ms var(--ease-out);
+  transition: transform 280ms var(--ease-out), opacity 280ms var(--ease-out);
   z-index: 200;
 }
 
 .toast.is-visible {
   transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ---------------- breakpoints ---------------- */
