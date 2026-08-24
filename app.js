@@ -349,13 +349,26 @@
   // install from ever showing stale code — see sw.js for why. Relative
   // path so the scope resolves correctly whether this lives at a
   // domain root or a GitHub Pages subpath.
+  //
+  // updateViaCache: "none" matters as much as anything in sw.js itself:
+  // by default, browsers check whether sw.js has changed using the same
+  // HTTP caching rules as any other request, so GitHub Pages' 10-minute
+  // cache-control could keep a browser from ever noticing a new
+  // sw.js — which would mean it never picks up fixes to the freshness
+  // logic, silently. This forces that specific check to always hit the
+  // network. registration.update() on top of it asks for that check
+  // immediately on every load, rather than waiting for the browser's
+  // own (infrequent) update timer.
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("sw.js").catch(() => {
-        /* Non-fatal — the site works fine without it, just without the
-           extra freshness guarantee. */
-      });
+      navigator.serviceWorker
+        .register("sw.js", { updateViaCache: "none" })
+        .then((reg) => reg.update())
+        .catch(() => {
+          /* Non-fatal — the site works fine without it, just without the
+             extra freshness guarantee. */
+        });
     });
   }
 
