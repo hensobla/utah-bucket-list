@@ -753,6 +753,14 @@ main {
   gap: 0.5rem;
 }
 
+.notes__version {
+  margin: 1.25rem 0 0;
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
 .notes__reset {
   font-family: var(--font);
   font-size: 0.76rem;
