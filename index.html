@@ -98,7 +98,10 @@
     Tracked entirely on this device — nothing is uploaded anywhere. Clear your browser data and the checklist resets.
     <button class="notes__reset" id="reset-btn">Reset all progress</button>
   </p>
-  <p class="notes__version">Build 7116704</p>
+  <!-- __BUILD_VERSION__ is stamped by .github/workflows/deploy.yml on every
+       push to main — see that file. Untouched, it just reads "v__BUILD_VERSION__"
+       (harmless placeholder) if you're looking at a raw/local copy. -->
+  <p class="notes__version">v__BUILD_VERSION__</p>
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
