@@ -25,6 +25,12 @@ Motion follows the rules in [emilkowalski/skills](https://github.com/emilkowalsk
 
 The band under the headline is a CSS `background-image` pointing at `assets/hero.jpg`. If that file is ever removed, the band falls back to a solid ink fill rather than a broken image. To regenerate it, see [`assets/HERO_IMAGE_PROMPT.md`](assets/HERO_IMAGE_PROMPT.md) for the prompt and specs.
 
+### Home screen icon + link previews
+
+- `assets/apple-touch-icon.png` (180×180, opaque — no transparency, since iOS applies its own corner mask) is what shows up if you "Add to Home Screen" from iOS Safari. It's the same Utah-outline mark as the favicon and hero, just rasterized larger. Regenerate it from `styles.css`'s `.hero__mark` path if that mark ever changes.
+- `manifest.json` plus the `apple-mobile-web-app-*` meta tags in `index.html` make the home-screen launch open without Safari's browser chrome and use "Utah Bucket List" as the label under the icon.
+- `assets/og-image.jpg` (1200×630, cropped from `hero.jpg`) is the `og:image`/`twitter:image` — the thumbnail iMessage, Slack, etc. show when the URL is shared. The `og:image` meta tag uses an **absolute** URL (`https://hensobla.github.io/utah-bucket-list/...`) since link-preview crawlers don't reliably resolve relative ones — that only resolves once this is actually deployed there; it won't preview correctly off a local or differently-hosted copy without updating that URL.
+
 ## Source content
 
 [`utah_bucket_list_updated.md`](utah_bucket_list_updated.md) is the original research doc this site was built from. Update `data.js` to change items, sections, or dates.
@@ -36,6 +42,8 @@ The band under the headline is a CSS `background-image` pointing at `assets/hero
 - `data.js` — the list itself: sections, items, seed "done" state
 - `app.js` — rendering, filtering, and localStorage logic
 - `assets/HERO_IMAGE_PROMPT.md` — prompt for the hero background image
+- `assets/apple-touch-icon.png`, `assets/og-image.jpg` — home-screen icon and link-preview image
+- `manifest.json` — web app manifest for the iOS home-screen install
 
 ## Running locally
 
