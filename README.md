@@ -15,6 +15,8 @@ A mobile-first checklist microsite for everything left to do in Utah, **Septembe
 
 Because progress lives in the browser's local storage, it's per-device — checking something off on your phone won't show as done on your laptop. That's the tradeoff for keeping this simple, free, and with nothing to sign into.
 
+Editing `data.js` later — adding items, rewording titles/blurbs, moving something to a different section — never touches anyone's saved progress; see the comment above `ITEMS` in `data.js` for the one thing that does (changing an existing item's `id`). The service worker (below) is unrelated to this — it manages its own separate Cache Storage for HTML/CSS/JS/images, never `localStorage`, so deploying updates can't affect saved checklist state either way.
+
 ## Design
 
 Look and feel is adapted from [altergresources.com](https://altergresources.com/): white ground, hairline pale-blue-gray borders, soft rounded corners, big two-weight headlines (light + bold in the same line), and color used sparingly — one accent per season instead of a full palette. Type is [Manrope](https://fonts.google.com/specimen/Manrope).

@@ -3,6 +3,13 @@
    One row per place/experience. `section` maps to SECTIONS below.
    `done: true` items are pre-checked on first load only (seed data);
    after that, everything lives in localStorage.
+
+   `id` is the persistence key someone's checked-off progress is saved
+   under — safe to freely edit title/meta/blurb/section/tags/dates on
+   an existing item, that never touches saved state, but changing its
+   `id` orphans whatever was saved under the old one (app.js reconciles
+   storage against these ids on every load and prunes anything that no
+   longer matches). Treat `id` as permanent once shipped.
    ============================================================ */
 
 const TRIP_START = "2026-09-01";

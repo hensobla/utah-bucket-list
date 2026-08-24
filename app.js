@@ -29,19 +29,43 @@
 
   // ---------- storage ----------
 
+  // Reconciles saved state against the *current* ITEMS list every load —
+  // this is what makes editing data.js safe for anyone who already has
+  // progress saved:
+  //   - an id already in storage keeps whatever the user set, even if a
+  //     future edit changes that item's title/meta/blurb/tags/section —
+  //     none of that is part of the key, so editing content never touches
+  //     saved state.
+  //   - an id that's brand new (an item just added to data.js) falls back
+  //     to its own seed default instead of being silently dropped.
+  //   - an id that no longer exists in ITEMS (removed, or its `id` string
+  //     changed) is pruned rather than left behind forever. This is the
+  //     one real way to lose someone's saved state: renaming an existing
+  //     item's `id` orphans whatever was saved under the old one. Treat
+  //     `id` as permanent — change title/meta/blurb/section/tags freely,
+  //     never `id`, unless you deliberately want that item to reset.
   function loadState() {
+    const seedDefaults = {};
+    ITEMS.forEach((item) => {
+      seedDefaults[item.id] = !!item.done;
+    });
+
+    let stored = null;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
+      const parsed = raw ? JSON.parse(raw) : null;
+      if (parsed && typeof parsed === "object") stored = parsed;
     } catch (e) {
-      /* corrupted storage — fall through to reseed */
+      /* corrupted storage — fall through to defaults */
     }
-    const seed = {};
-    ITEMS.forEach((item) => {
-      seed[item.id] = !!item.done;
+
+    const merged = {};
+    Object.keys(seedDefaults).forEach((id) => {
+      merged[id] = stored && id in stored ? !!stored[id] : seedDefaults[id];
     });
-    persist(seed);
-    return seed;
+
+    persist(merged);
+    return merged;
   }
 
   function loadUI() {
