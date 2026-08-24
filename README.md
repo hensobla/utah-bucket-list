@@ -31,6 +31,10 @@ The band under the headline is a CSS `background-image` pointing at `assets/hero
 - `manifest.json` plus the `apple-mobile-web-app-*` meta tags in `index.html` make the home-screen launch open without Safari's browser chrome and use "Utah Bucket List" as the label under the icon.
 - `assets/og-image.jpg` (1200×630, cropped from `hero.jpg`) is the `og:image`/`twitter:image` — the thumbnail iMessage, Slack, etc. show when the URL is shared. The `og:image` meta tag uses an **absolute** URL (`https://hensobla.github.io/utah-bucket-list/...`) since link-preview crawlers don't reliably resolve relative ones — that only resolves once this is actually deployed there; it won't preview correctly off a local or differently-hosted copy without updating that URL.
 
+### Staying fresh after "Add to Home Screen"
+
+GitHub Pages caches every file — including `index.html` itself — for 10 minutes server-side (`cache-control: max-age=600`), and there's no way to override that from a static repo. iOS home-screen installs can also hold onto old content more stubbornly than a regular Safari tab. `sw.js` is a minimal service worker that closes that gap: it tries the network first on every same-origin request and only ever falls back to its own cache if there's no connection at all, so an install on your home screen always reflects whatever's actually deployed, not a stale snapshot from whenever you added it. It registers itself from `app.js` and needs no configuration — if you ever change the caching strategy, bump `CACHE_NAME` in `sw.js` so old cached entries get cleared out on activate.
+
 ## Source content
 
 [`utah_bucket_list_updated.md`](utah_bucket_list_updated.md) is the original research doc this site was built from. Update `data.js` to change items, sections, or dates.
@@ -44,6 +48,7 @@ The band under the headline is a CSS `background-image` pointing at `assets/hero
 - `assets/HERO_IMAGE_PROMPT.md` — prompt for the hero background image
 - `assets/apple-touch-icon.png`, `assets/og-image.jpg` — home-screen icon and link-preview image
 - `manifest.json` — web app manifest for the iOS home-screen install
+- `sw.js` — service worker; keeps the home-screen install from showing stale code (see below)
 
 ## Running locally
 

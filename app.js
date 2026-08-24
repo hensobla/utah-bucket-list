@@ -320,6 +320,21 @@
     });
   }
 
+  // ---------- service worker ----------
+  // Registers sw.js, whose only job is to keep the "Add to Home Screen"
+  // install from ever showing stale code — see sw.js for why. Relative
+  // path so the scope resolves correctly whether this lives at a
+  // domain root or a GitHub Pages subpath.
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {
+        /* Non-fatal — the site works fine without it, just without the
+           extra freshness guarantee. */
+      });
+    });
+  }
+
   // ---------- go ----------
 
   wireFilters();
