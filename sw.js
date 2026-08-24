@@ -11,7 +11,7 @@
    isn't enough for "always show what I just deployed."
    ============================================================ */
 
-const CACHE_NAME = "utah-bucket-list-v1";
+const CACHE_NAME = "utah-bucket-list-v2";
 
 self.addEventListener("install", () => {
   // Don't wait for existing tabs/home-screen instances to close before
@@ -32,8 +32,16 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
 
+  // A plain fetch(req) here still goes through the browser's own HTTP
+  // cache first — GitHub Pages' 10-minute cache-control means a recently
+  // visited page would come back from that cache without ever reaching
+  // the network, defeating the entire point. { cache: "no-store" }
+  // forces this specific fetch to bypass HTTP caching and hit the
+  // network for real, every time.
+  const freshReq = new Request(req, { cache: "no-store" });
+
   event.respondWith(
-    fetch(req)
+    fetch(freshReq)
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
